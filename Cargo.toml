@@ -1,0 +1,8 @@
+[package]
+name = "vms2-tile-db-reader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+byteorder = "1.5"
+rusqlite = { version = "0.32", features = ["bundled"] }
