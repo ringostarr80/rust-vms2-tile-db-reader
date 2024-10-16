@@ -2,6 +2,12 @@
 name = "vms2-tile-db-reader"
 version = "0.1.0"
 edition = "2021"
+authors = ["Ringo Leese <webmaster@ringoleese.de>"]
+description = "A class for reading tile data from a database."
+repository = "https://github.com/ringostarr80/rust-vms2-tile-db-reader"
+homepage = "https://github.com/ringostarr80/rust-vms2-tile-db-reader"
+license = "MIT"
+keywords = ["locr", "vms2", "tile"]
 
 [dependencies]
 byteorder = "1.5"
