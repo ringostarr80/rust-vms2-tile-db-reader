@@ -83,6 +83,27 @@ impl SQLite {
 }
 
 impl Source for SQLite {
+    /// Get raw data from the SQLite database.
+    ///
+    /// # Example
+    /// ```
+    /// use std::path::Path;
+    /// use vms2_tile_db_reader::data_type::DataType;
+    /// use vms2_tile_db_reader::sources::{SQLite, Source};
+    ///
+    /// let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
+    /// let tile_data = tile_db
+    ///     .get_raw_data(
+    ///         34686,
+    ///         21566,
+    ///         16,
+    ///         String::from("building"),
+    ///         Some(String::from("*")),
+    ///         Some(DataType::Polygons),
+    ///     ).unwrap();
+    ///
+    /// assert!(tile_data.len() >= 4);
+    /// ```
     fn get_raw_data(
         &self,
         x: u32,
