@@ -10,7 +10,7 @@ pub trait Source {
         &self,
         x: u32,
         y: u32,
-        z: u32,
+        z: u8,
         key: String,
         value: Option<String>,
         data_type: Option<DataType>,
@@ -27,7 +27,7 @@ impl SQLite {
         Ok(Self { conn })
     }
 
-    fn get_detail_zoom(z: u32, value: &String, data_type: &DataType) -> u32 {
+    fn get_detail_zoom(z: u8, value: &String, data_type: &DataType) -> u8 {
         let mut detail_zooms = vec![0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12, 14];
 
         match value.as_str() {
@@ -54,7 +54,7 @@ impl SQLite {
         &self,
         query: &str,
         query_params: &[&dyn ToSql],
-    ) -> Result<Vec<(u32, u32, u32, Vec<u8>)>> {
+    ) -> Result<Vec<(u32, u32, u8, Vec<u8>)>> {
         let mut stmt = self.conn.prepare(query)?;
         let mut rows = stmt.query(query_params)?;
 
@@ -108,7 +108,7 @@ impl Source for SQLite {
         &self,
         x: u32,
         y: u32,
-        z: u32,
+        z: u8,
         mut key: String,
         mut value: Option<String>,
         mut data_type: Option<DataType>,
@@ -129,7 +129,7 @@ impl Source for SQLite {
 
         let mut data_buffer = Cursor::new(Vec::new());
         let data_type_int = data_type as u32;
-        let max_tile_zoom = 16_u32;
+        let max_tile_zoom = 16_u8;
         let mut number_of_tiles = 0_u32;
         let mut tile_weight = 0_u32;
 
@@ -155,7 +155,7 @@ impl Source for SQLite {
                 AND z = ?9";
 
         for query_z in 0..=max_tile_zoom {
-            let queried_data: Vec<(u32, u32, u32, Vec<u8>)>;
+            let queried_data: Vec<(u32, u32, u8, Vec<u8>)>;
 
             if query_z <= z {
                 let query_x = x >> (z - query_z);
@@ -194,13 +194,13 @@ impl Source for SQLite {
 
             if queried_data.len() > 0 {
                 number_of_tiles += queried_data.len() as u32;
-                tile_weight += u32::pow(4, max_tile_zoom - query_z);
+                tile_weight += 4_u32.pow((max_tile_zoom - query_z) as u32);
 
                 for (tile_x, tile_y, tile_z, tile_data) in queried_data {
                     let _ = data_buffer.write_u32::<LittleEndian>(tile_x);
                     let _ = data_buffer.write_u32::<LittleEndian>(tile_y);
-                    let _ = data_buffer.write_u32::<LittleEndian>(tile_z);
-                    let _ = data_buffer.write_u32::<LittleEndian>(detail_zoom);
+                    let _ = data_buffer.write_u32::<LittleEndian>(tile_z as u32);
+                    let _ = data_buffer.write_u32::<LittleEndian>(detail_zoom as u32);
                     let _ = data_buffer.write_u32::<LittleEndian>(tile_data.len() as u32);
 
                     if tile_data.len() > 0 {
@@ -209,7 +209,7 @@ impl Source for SQLite {
                 }
             }
 
-            if tile_weight >= u32::pow(4, max_tile_zoom - z) {
+            if tile_weight >= 4_u32.pow((max_tile_zoom - z) as u32) {
                 break;
             }
         }

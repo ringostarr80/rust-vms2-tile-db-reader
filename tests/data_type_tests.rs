@@ -48,9 +48,9 @@ fn test_display_polygons() {
 
 #[test]
 fn test_data_type_to_int_via_into() {
-    let points_int: u32 = DataType::Points.into();
-    let lines_int: u32 = DataType::Lines.into();
-    let polygons_int: u32 = DataType::Polygons.into();
+    let points_int: u8 = DataType::Points.into();
+    let lines_int: u8 = DataType::Lines.into();
+    let polygons_int: u8 = DataType::Polygons.into();
 
     assert_eq!(points_int, 0);
     assert_eq!(lines_int, 1);

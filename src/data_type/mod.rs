@@ -21,7 +21,7 @@ impl FromStr for DataType {
     }
 }
 
-impl From<DataType> for u32 {
+impl From<DataType> for u8 {
     fn from(data_type: DataType) -> Self {
         match data_type {
             DataType::Points => 0,
