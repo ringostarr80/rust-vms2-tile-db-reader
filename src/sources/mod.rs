@@ -209,7 +209,6 @@ impl Source for SQLite {
                 }
             }
 
-            println!("max_tile_zoom: {}, z: {}, tile_weight: {}", max_tile_zoom, query_z, tile_weight);
             if tile_weight >= 4_u64.pow((max_tile_zoom - z) as u32) {
                 break;
             }
