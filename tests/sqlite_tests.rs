@@ -84,6 +84,22 @@ fn test_get_blue_marble_data() {
 }
 
 #[test]
+fn test_get_raw_data_where_zoom_is_zero() {
+    let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
+    let tile_data = tile_db
+        .get_raw_data(
+            0,
+            0,
+            0,
+            String::from("land"),
+            None,
+            None
+        ).unwrap();
+
+    assert!(tile_data.len() >= 4);
+}
+
+#[test]
 fn test_get_data_from_internal_multi_tile_query() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db

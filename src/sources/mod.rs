@@ -131,7 +131,7 @@ impl Source for SQLite {
         let data_type_int = data_type as u32;
         let max_tile_zoom = 16_u8;
         let mut number_of_tiles = 0_u32;
-        let mut tile_weight = 0_u32;
+        let mut tile_weight = 0_u64;
 
         let single_tile_query = "SELECT x, y, z, data \
             FROM tiles \
@@ -194,7 +194,7 @@ impl Source for SQLite {
 
             if queried_data.len() > 0 {
                 number_of_tiles += queried_data.len() as u32;
-                tile_weight += 4_u32.pow((max_tile_zoom - query_z) as u32);
+                tile_weight += 4_u64.pow((max_tile_zoom - query_z) as u32);
 
                 for (tile_x, tile_y, tile_z, tile_data) in queried_data {
                     let _ = data_buffer.write_u32::<LittleEndian>(tile_x);
@@ -209,7 +209,8 @@ impl Source for SQLite {
                 }
             }
 
-            if tile_weight >= 4_u32.pow((max_tile_zoom - z) as u32) {
+            println!("max_tile_zoom: {}, z: {}, tile_weight: {}", max_tile_zoom, query_z, tile_weight);
+            if tile_weight >= 4_u64.pow((max_tile_zoom - z) as u32) {
                 break;
             }
         }
