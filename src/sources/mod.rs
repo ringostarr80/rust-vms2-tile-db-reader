@@ -1,4 +1,6 @@
 use crate::data_type::DataType;
+use crate::error::Error;
+
 use byteorder::{LittleEndian, WriteBytesExt};
 use rusqlite::types::ValueRef;
 use rusqlite::{params, Connection, OpenFlags, Result, ToSql};
@@ -14,7 +16,7 @@ pub trait Source {
         key: String,
         value: Option<String>,
         data_type: Option<DataType>,
-    ) -> Result<Vec<u8>>;
+    ) -> Result<Vec<u8>, Error>;
 }
 
 pub struct SQLite {
@@ -22,8 +24,9 @@ pub struct SQLite {
 }
 
 impl SQLite {
-    pub fn new(db_path: &Path) -> Result<Self> {
-        let conn = Connection::open_with_flags(db_path, OpenFlags::SQLITE_OPEN_READ_ONLY)?;
+    pub fn new(db_path: &Path) -> Result<Self, Error> {
+        let conn = Connection::open_with_flags(db_path, OpenFlags::SQLITE_OPEN_READ_ONLY)
+            .map_err(|_e| Error::DbError(format!("Failed to open {:?}", db_path)))?;
         Ok(Self { conn })
     }
 
@@ -54,12 +57,22 @@ impl SQLite {
         &self,
         query: &str,
         query_params: &[&dyn ToSql],
-    ) -> Result<Vec<(u32, u32, u8, Vec<u8>)>> {
-        let mut stmt = self.conn.prepare(query)?;
-        let mut rows = stmt.query(query_params)?;
+    ) -> Result<Vec<(u32, u32, u8, Vec<u8>)>, Error> {
+        let mut stmt = self.conn.prepare(query).map_err(|_e| {
+            Error::DbError(format!("Failed to prepare statement for query: {}", query))
+        })?;
+        let mut rows = stmt.query(query_params).map_err(|_e| {
+            Error::DbError(format!(
+                "Failed to execute the prepared statement with params"
+            ))
+        })?;
 
         let mut result = Vec::new();
-        while let Some(row) = rows.next()? {
+        while let Some(row) = rows.next().map_err(|_e| {
+            Error::DbError(format!(
+                "Failed to attempt to get the next row from the query"
+            ))
+        })? {
             let result_data = row.get_ref(3);
             let mut data = Vec::new();
             if let Ok(unwrapped_result_data) = result_data {
@@ -112,7 +125,7 @@ impl Source for SQLite {
         mut key: String,
         mut value: Option<String>,
         mut data_type: Option<DataType>,
-    ) -> Result<Vec<u8>> {
+    ) -> Result<Vec<u8>, Error> {
         match key.as_str() {
             "land" | "terrain" | "blue_marble" | "elevation" | "bathymetry" | "depth" => {
                 value = Some(key);

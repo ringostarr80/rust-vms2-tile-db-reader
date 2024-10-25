@@ -29,8 +29,9 @@ fn test_get_data_city_points() {
             16,
             String::from("place"),
             Some(String::from("city")),
-            Some(DataType::Points)
-        ).unwrap();
+            Some(DataType::Points),
+        )
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
@@ -39,14 +40,8 @@ fn test_get_data_city_points() {
 fn test_get_land_data() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db
-        .get_raw_data(
-            34686,
-            21566,
-            16,
-            String::from("land"),
-            None,
-            None
-        ).unwrap();
+        .get_raw_data(34686, 21566, 16, String::from("land"), None, None)
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
@@ -55,14 +50,8 @@ fn test_get_land_data() {
 fn test_get_terrain_data() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db
-        .get_raw_data(
-            34686,
-            21566,
-            16,
-            String::from("terrain"),
-            None,
-            None
-        ).unwrap();
+        .get_raw_data(34686, 21566, 16, String::from("terrain"), None, None)
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
@@ -71,14 +60,8 @@ fn test_get_terrain_data() {
 fn test_get_blue_marble_data() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db
-        .get_raw_data(
-            34686,
-            21566,
-            16,
-            String::from("blue_marble"),
-            None,
-            None
-        ).unwrap();
+        .get_raw_data(34686, 21566, 16, String::from("blue_marble"), None, None)
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
@@ -87,14 +70,8 @@ fn test_get_blue_marble_data() {
 fn test_get_raw_data_where_zoom_is_zero() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db
-        .get_raw_data(
-            0,
-            0,
-            0,
-            String::from("land"),
-            None,
-            None
-        ).unwrap();
+        .get_raw_data(0, 0, 0, String::from("land"), None, None)
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
@@ -103,14 +80,8 @@ fn test_get_raw_data_where_zoom_is_zero() {
 fn test_get_data_from_internal_multi_tile_query() {
     let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
     let tile_data = tile_db
-        .get_raw_data(
-            1083,
-            673,
-            12,
-            String::from("land"),
-            None,
-            None
-        ).unwrap();
+        .get_raw_data(1083, 673, 12, String::from("land"), None, None)
+        .unwrap();
 
     assert!(tile_data.len() >= 4);
 }
