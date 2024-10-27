@@ -3,6 +3,7 @@
 ![license](https://img.shields.io/github/license/ringostarr80/rust-vms2-tile-db-reader)
 ![github_workflow_status](https://img.shields.io/github/actions/workflow/status/ringostarr80/rust-vms2-tile-db-reader/rust.yml)
 [![codecov](https://codecov.io/gh/ringostarr80/rust-vms2-tile-db-reader/graph/badge.svg?token=vpMSVSlT84)](https://codecov.io/gh/ringostarr80/rust-vms2-tile-db-reader)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ringostarr80_rust-vms2-tile-db-reader&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ringostarr80_rust-vms2-tile-db-reader)
 ![github_tag](https://img.shields.io/github/v/tag/ringostarr80/rust-vms2-tile-db-reader)
 [![Crates.io](https://img.shields.io/crates/v/vms2-tile-db-reader.svg)](https://crates.io/crates/vms2-tile-db-reader)
 
