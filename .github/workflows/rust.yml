@@ -27,7 +27,7 @@ jobs:
     needs: build
 
     container:
-      image: xd009642/tarpaulin:latest
+      image: xd009642/tarpaulin:latest-slim
       options: --security-opt seccomp=unconfined
 
     steps:
