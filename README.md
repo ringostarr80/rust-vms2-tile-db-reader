@@ -1,5 +1,6 @@
 # Vms2TileDbReader
 
+![license](https://img.shields.io/github/license/ringostarr80/rust-vms2-tile-db-reader)
 ![github_workflow_status](https://img.shields.io/github/actions/workflow/status/ringostarr80/rust-vms2-tile-db-reader/rust.yml)
 [![codecov](https://codecov.io/gh/ringostarr80/rust-vms2-tile-db-reader/graph/badge.svg?token=vpMSVSlT84)](https://codecov.io/gh/ringostarr80/rust-vms2-tile-db-reader)
 ![github_tag](https://img.shields.io/github/v/tag/ringostarr80/rust-vms2-tile-db-reader)
