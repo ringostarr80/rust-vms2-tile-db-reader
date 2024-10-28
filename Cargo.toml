@@ -1,6 +1,6 @@
 [package]
 name = "vms2-tile-db-reader"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 authors = ["Ringo Leese <webmaster@ringoleese.de>"]
 description = "A class for reading tile data from a database."

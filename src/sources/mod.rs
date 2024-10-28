@@ -25,8 +25,12 @@ pub struct SQLite {
 
 impl SQLite {
     pub fn new(db_path: &Path) -> Result<Self, Error> {
-        let conn = Connection::open_with_flags(db_path, OpenFlags::SQLITE_OPEN_READ_ONLY)
-            .map_err(|_e| Error::DbError(format!("Failed to open {:?}", db_path)))?;
+        let conn = Connection::open_with_flags(db_path, OpenFlags::SQLITE_OPEN_READ_ONLY).map_err(
+            |e| Error::DbError {
+                message: format!("Failed to open {:?}", db_path),
+                source: Some(Box::new(e)),
+            },
+        )?;
         Ok(Self { conn })
     }
 
@@ -58,20 +62,19 @@ impl SQLite {
         query: &str,
         query_params: &[&dyn ToSql],
     ) -> Result<Vec<(u32, u32, u8, Vec<u8>)>, Error> {
-        let mut stmt = self.conn.prepare(query).map_err(|_e| {
-            Error::DbError(format!("Failed to prepare statement for query: {}", query))
+        let mut stmt = self.conn.prepare(query).map_err(|e| Error::DbError {
+            message: format!("Failed to prepare statement for query: {}", query),
+            source: Some(Box::new(e)),
         })?;
-        let mut rows = stmt.query(query_params).map_err(|_e| {
-            Error::DbError(format!(
-                "Failed to execute the prepared statement with params"
-            ))
+        let mut rows = stmt.query(query_params).map_err(|e| Error::DbError {
+            message: format!("Failed to execute the prepared statement with params"),
+            source: Some(Box::new(e)),
         })?;
 
         let mut result = Vec::new();
-        while let Some(row) = rows.next().map_err(|_e| {
-            Error::DbError(format!(
-                "Failed to attempt to get the next row from the query"
-            ))
+        while let Some(row) = rows.next().map_err(|e| Error::DbError {
+            message: format!("Failed to attempt to get the next row from the query"),
+            source: Some(Box::new(e)),
         })? {
             let result_data = row.get_ref(3);
             let mut data = Vec::new();
