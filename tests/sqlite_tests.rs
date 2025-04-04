@@ -91,3 +91,13 @@ fn test_db_file_does_not_exists() {
     let tile_db = SQLite::new(Path::new("./tests/data/invalid.sqlite"));
     assert!(tile_db.is_err());
 }
+
+#[test]
+fn test_behaviour_when_max_tile_zoom_minus_z_is_negative() {
+    let tile_db = SQLite::new(Path::new("./tests/data/braunschweig.sqlite")).unwrap();
+    let tile_data = tile_db
+        .get_raw_data(69372, 43129, 17, String::from("highway"), Some(String::from("pedestrian")), Some(DataType::Polygons))
+        .unwrap();
+
+    assert!(tile_data.len() >= 4);
+}
