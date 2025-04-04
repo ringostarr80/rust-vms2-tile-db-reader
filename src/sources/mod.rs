@@ -225,7 +225,7 @@ impl Source for SQLite {
                 }
             }
 
-            if tile_weight >= 4_u64.pow((max_tile_zoom - z) as u32) {
+            if tile_weight as f64 >= 4_f64.powi(max_tile_zoom as i32 - z as i32) {
                 break;
             }
         }
